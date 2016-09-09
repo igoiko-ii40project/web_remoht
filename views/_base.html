@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+		<title>ii40 Project</title>
+		<meta name="description" content="ii40 Project!" />
+		<meta name="viewport" content="initial-scale=1.0, width=device-width, user-scalable=no" />
+		<link rel="icon" type="image/png" href="/static/favicon.ico" />
+		{% if debug %}
+		<link href="/static/css/bootstrap.css" rel="stylesheet" />
+		<link href="/static/css/bootstrap-responsive.css" rel="stylesheet" />
+		<link href="/static/css/font-awesome.css" rel="stylesheet" />
+		<link href='/static/css/main.css' rel='stylesheet' />
+		<link href='/static/css/pesta.css' rel='stylesheet' />
+        <link rel="stylesheet" href="/static/css/style.min.css" />
+		{% else %}
+		<link href='/static/css2/bootstrap-combined.min.css' rel='stylesheet' />
+		<link href='/static/css2/font-awesome.min.css' rel='stylesheet' />
+		<link href='/static/css/main.min.css' rel='stylesheet' />
+         <link rel="stylesheet" href="/static/css/themes/default/style.min.css" />
+		{% endif %}
+   </head>
+	 <body>
+
+			<div class="navbar navbar-inverse navbar-fixed-top">
+				<div class="navbar-inner">
+					<div class="co  ntainer">
+						<a class="brand" href="/">ii40 Project</a>
+						<ul class='nav'>
+							<li>
+								<a href='#' id='aboutDlgLink' title='About'>
+									<i class='icon-question-sign icon-large'></i></a>
+							</li>
+							<li>
+								<a href='http://github.com/EnerNOC/remoht.us' title='On Github'>
+									<i class='icon-large icon-github-alt'></i></a>
+							</li>
+							<li><span class='spinner' style='display:none;margin-top:6px' /></li>
+						</ul>
+						{% block header %}
+						{% endblock %}
+						<div class="nav-collapse collapse">
+							<ul class="nav">
+							     {%  set user = gae_users.get_current_user() %}
+								{% if not user %}
+								<li class="">
+									<a href='{{ gae_users.create_login_url(self.request_uri) }}'>Login</a>
+								</li>
+								{% else %}
+								<li class="">
+									<a href='#'>{{ user.email() }}</a>
+								</li>
+								<li class="">
+									<a href="/logout" onclick="sessionStorage.clear();">Logout</a>
+								</li>
+								{% endif %}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+    	<div class="container container-main">
+				{% block main %}
+				{% endblock %}
+			</div>
+
+			<div id='aboutDialog' class="modal hide fade">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3>About ii40Project</h3>
+				</div>
+				<div class="modal-body">
+					<p>This is an open source technology demo that was built for a 
+						<a href='http://www.meetup.com/gdg-boston/'>Boston Google Developers</a> meetup at 
+						<a href='http://enernoc.com'>EnerNOC</a> in January 2013. The original code was written
+						by <a href='http://blog.thomnichols.org'>Thom Nichols</a>.
+					</p>
+					<p>Remoht.us runs on <a href='https://developers.google.com/appengine/' 
+						target='_new'>Google Appengine</a> and incorporates push-based communication to monitor 
+						environmental sensors.  The web app uses <a href='http://xmpp.org' target='_new'>XMPP</a> to 
+						perform bidirectional communication between the cloud and a <a href='http://www.raspberrypi.org/' 
+							target='_new'>Raspberry Pi</a>.  The browser interface receives push updates using AppEngine's
+						<a href='https://developers.google.com/appengine/docs/python/channel/' 
+						target='_new'>Channel API</a>.
+					</p>
+					<p>You can read more about the project on the <a href='http://open.enernoc.com/blog/2013/02/27/technology-demo-real-time-control-and-telemetry/' target='_new'>EnerNOC Open blog</a>.  Download the 
+					source <a href='http://github.com/EnerNOC/remoht.us' target='_new'>on Github</a>!</p>
+				</div>
+				<!--
+				<div class="modal-footer">
+				</div>
+				-->
+			</div>
+			
+		{% if debug %}
+		{% if _ is mobile %}
+		<script type="text/javascript" src='/static/js/lib/zepto.js'></script>
+		{% else  %}
+		<script type="text/javascript" src='/static/js/lib/jquery.js'></script>
+		{% endif %}
+		<script type="text/javascript" src='/static/js/lib/bootstrap.js'></script> 
+		<script type="text/javascript" src='/static/js/lib/ICanHaz.min.js'></script> 
+		<script type="text/javascript" src='/static/js/app.js'></script> 
+		{% else %}
+		{% if _ is mobile %}
+		<script type="text/javascript" src='/static/js2/zepto.min.js'></script> 
+		{% else  %}
+		<script type="text/javascript" src='/static/js2/jquery.min.js'></script> 
+		{% endif %}
+		<script type="text/javascript" src='/static/js2/bootstrap.min.js'></script> 
+        <script type="text/javascript" src='/static/js2/ICanHaz.min.js'></script>
+		<script type="text/javascript" src='/static/js/app.min.js'></script> 
+		{% endif %}
+		{% block more_script %}
+		{% endblock %}
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#aboutDlgLink').on('click', function(e) {
+					$('#aboutDialog').modal()
+				})
+			})
+		</script> 
+	</body>
+</html>

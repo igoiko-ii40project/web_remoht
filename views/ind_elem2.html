@@ -1,0 +1,148 @@
+{% extends "_base.html" %}
+
+{% block main %}
+<div class='row'>
+
+	<div class='span18'>
+		<h1 id='device_header'>Device's Industrial Element Component
+			<small class='device_name pull-right'>(no device selected)</small>
+		</h1>
+
+		<div class='row'>
+			<div class='span8'>
+				<h4>Functions to device</h4>
+				<div id='relay_list' class='btn-toolbar'>
+					<a href='/device/-1/funs/1' class='btn btn-large disabled btn-primary'>Fun 1</a>
+					<a href='/device/-1/funs/2' class='btn btn-large disabled'>Fun 2</a>
+					<a href='/device/-1/funs/3' class='btn btn-large disabled'>Fun 3</a>
+					<a href='/device/-1/funs/4' class='btn btn-large disabled'>Fun 4</a>
+					<a href='/device/-1/funs/5' class='btn btn-large disabled'>Fun 5</a>
+				</div>
+			</div>
+
+			<div class='span4' id='readings'>
+				<h4>Current Readings </h4>
+				<div>
+					<span class='rlabel'>Date:</span>
+					<strong id='current_date'>(timestamp)</strong>
+				</div>
+				<div>
+					<span class='rlabel'>JID:</span>
+					<strong id='full_JID'>(JID)</strong>
+				</div>
+				<div>
+					<span class='rlabel'>Temp:</span>
+					<strong id='temp'>(unknown)</strong>
+					<span class='muted'>&deg;c</span>
+				</div>
+				<div>
+					<span class='rlabel'>Light:</span>
+					<strong id='light'>(unknown)</strong>
+					<span class='muted'>%</span>
+				</div>
+			</div>
+		</div>
+
+		<div class='row'>
+			<h4>Industrial Element Information... </h4>
+			<div class='span3' id='col_ind_info1'>
+				<div>
+					<span class='rlabel'>Element 1</span>
+				</div>
+			</div>
+			<div class='span3' id='col_ind_info2'>
+				<div>
+					<span class='rlabel'>Element 2</span>
+				</div>
+			</div>
+			<div class='span3' id='col_ind_info3'>
+				<div>
+					<span class='rlabel'>Element 3</span>
+				</div>
+			</div>
+			<div class='span3' id='col_ind_info4'>
+				<div>
+					<span class='rlabel'>Element 4</span>
+				</div>
+			</div>
+<!--
+			<div class='span1' id='col_ind_info5'>
+				<div>
+					<span class='rlabel'>Element 5</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info6'>
+				<div>
+					<span class='rlabel'>Element 6</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info7'>
+				<div>
+					<span class='rlabel'>Element 7</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info8'>
+				<div>
+					<span class='rlabel'>Element 8</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info9'>
+				<div>
+					<span class='rlabel'>Element 9</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info10'>
+				<div>
+					<span class='rlabel'>Element 10</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info11'>
+				<div>
+					<span class='rlabel'>Element 11</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info12'>
+				<div>
+					<span class='rlabel'>Element 12</span>
+				</div>
+			</div>
+
+			<div class='span1' id='col_ind_info13'>
+				<div>
+					<span class='rlabel'>Element 13</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info14'>
+				<div>
+					<span class='rlabel'>Element 14</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info15'>
+				<div>
+					<span class='rlabel'>Element 15</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info16'>
+				<div>
+					<span class='rlabel'>Element 16</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info17'>
+				<div>
+					<span class='rlabel'>Element 17</span>
+				</div>
+			</div>
+			<div class='span1' id='col_ind_info18'>
+				<div>
+					<span class='rlabel'>Element 18</span>
+				</div>
+			</div>
+-->
+		</div>
+	</div>
+
+
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,266 @@
+{% extends "_base.html" %}
+
+{% block main %}
+<div class='row'>
+	<div class='row'>
+		<div class='span3'>
+			<div class='well'>
+				<ul class="nav nav-list" id='device_list'>
+					<li class="nav-header">Devices</li>
+					<li class='muted'>(add a device below)</li>
+				</ul>
+				<!-- IRD 24/07/2015 Sustituir atributo etiqueta HTML Style por clase css -->
+				<img src="static/img/Macarbox_logo.png" alt="Macarbox Machine" style="width:150px;height:120px">
+			</div>
+
+			<div class='well'>
+				<ul class="nav nav-list" id='resource_list'>
+					<li class="nav-header">Add a Device</li>
+					<li class='muted'>(no online devices)</li>
+				</ul>
+				<a href='/resources/' id='resources-refresh'>Refresh</a>
+			</div>
+		</div>
+
+		<div class='span9'>
+			<h1 id='device_header'>Asset Management & Monitoring
+				<small class='device_name pull-right'>(no device selected)</small>
+			</h1>
+
+			<div class='row'>
+				<div class='span4'>
+					<h4>Sample data read from device</h4>
+					<div id='relay_list' class='btn-toolbar'>
+						<a href='/device/-1/relay/1' class='btn btn-large disabled btn-primary'>Relay 1</a>
+						<a href='/device/-1/relay/2' class='btn btn-large disabled'>Relay 2</a>
+						<a href='/device/-1/relay/3' class='btn btn-large disabled'>Relay 3</a>
+					</div>
+
+					<h4>Some Commands</h4>
+					<div id='cmd_list' class='btn-toolbar'>
+						<a href='/device/-1/funs/1' class='btn btn-large disabled btn-primary'>Get Code</a>
+						<a href='/device/-1/funs/2' class='btn btn-large disabled btn-primary'>Get Cred</a>
+					</div>
+					<h4>.........</h4>
+					 <!--<a onclick='remoht.recupera_datos()' class='btn btn-large' id='leedata'>Lee Datastore</a>-->
+					<a href='/ind_elem/' class='btn btn-large'>Detalle</a>
+					<a href='/add_admin/' class='btn btn-large'>Add Admin</a>
+				</div>
+
+				<div class='span4' id='readings'>
+					<h4>Current Readings </h4>
+					<div>
+						<span class='rlabel'>Date:</span>
+						<strong id='current_date'>(timestamp)</strong>
+					</div>
+					<div>
+						<span class='rlabel'>JID:</span>
+						<strong id='full_JID'>(JID)</strong>
+					</div>
+					<div>
+						<span class='rlabel'>SIGNED:</span>
+						<strong id='signed_JID'>(signed)</strong>
+					</div>
+					<div>
+						<span class='rlabel'>Temp:</span>
+						<strong id='temp'>(unknown)</strong>
+						<span class='muted'>&deg;c</span>
+					</div>
+					<div>
+						<span class='rlabel'>Light:</span>
+						<strong id='light'>(unknown)</strong>
+						<span class='muted'>%</span>
+					</div>
+				</div>
+			</div>
+
+			<div class='row'>
+				<div class='span4' id='row_asset_info'>
+					<h4>Monitored Asset Information... </h4>
+					<div>
+						<ul class="nav nav-list" id='ind_elem_list'>
+							<li class="nav-header" >Industrial Elements</li>
+							<li class='muted'>(ind elems list)</li>
+						</ul>
+
+					</div>
+				</div>
+			</div>
+
+			<div class='row'>
+				<div class='span9'>
+					<div id='chart'> </div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<!--
+    IRD 24/07/2015	
+	Esta parte del código se quita porque se va a mostrar en una nueva pagina (ind_elem_element_msg.html)
+	<div class='row'>
+		<div class='span12'>
+			<h4>Industrial Element Information... </h4>
+			<div class='span3' id='col_ind_info1'>
+				<div>
+					<span class='rlabel' id="ind_elem_1_title">Element 1</span>
+					<ul class="nav nav-list" id='ind_elem_1'>
+						<li class="nav-header">Ind Element 1</li>
+						<li class='muted'>(ind_element attibutes)</li>
+					</ul>
+				</div>
+			</div>
+			<div class='span3' id='col_ind_info2'>
+				<div>
+					<span class='rlabel' id="ind_elem_2_title">Element 2</span>
+					<ul class="nav nav-list" id='ind_elem_2'>
+						<li class="nav-header">Ind Element 2</li>
+						<li class='muted'>(ind_element attibutes)</li>
+					</ul>
+				</div>
+			</div>
+			<div class='span3' id='col_ind_info3'>
+				<div>
+					<span class='rlabel'id="ind_elem_3_title">Element 3</span>
+					<ul class="nav nav-list" id='ind_elem_3'>
+						<li class="nav-header">Ind Element 3</li>
+						<li class='muted'>(ind_element attibutes)</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+   -->
+	<div class='row'>
+		<!--<div class='span12' id='row_debug'>-->
+			
+			 <!-- IRD 24/07/2015
+			      Por cada uno de los últimos 5 mensajes visualizaremos una fila con 5 columnas (datos)
+			      el último mernsaje recibido se hallará en la última fila y los más antiguos iran despareciendo
+				  Estilo cola (añadimos por la parte baja de la tabla y retiramos por la parte superior visualmente)
+			-->
+			<div class="table-responsive span12">
+			
+			<table class="table table-bordered table-striped table-condensed table-hover">
+			<h4>Debug & other app maintenance info... </h4>
+				<thead>
+					<tr>
+						<th>Msg</th>
+						<th>From</th>
+						<th>Cmd</th>
+						<th>Data</th>
+						<th>Feed</th>
+					</tr>
+				</thead>
+				<tbody>
+                	<tr class="info">
+						<td id='debug_msg4'>(debug_msg)</td>
+						<td id='debug_msg_from4'>(debug_from)</td>
+						<td id='xmpp_msg_type4'>(xmpp_msg_type)</td>
+						<td id='xmpp_msg_data4'>(xmpp_msg_data)</td>
+						<td id='twitter_feed4'>(twitter feed)</td>
+					</tr>
+                	 <tr class="info">
+						<td id='debug_msg3'>(debug_msg)</td>
+						<td id='debug_msg_from3'>(debug_from)</td>
+						<td id='xmpp_msg_type3'>(xmpp_msg_type)</td>
+						<td id='xmpp_msg_data3'>(xmpp_msg_data)</td>
+						<td id='twitter_feed3'>(twitter feed)</td>
+					</tr>
+                 	<tr class="info">
+						<td id='debug_msg2'>(debug_msg)</td>
+						<td id='debug_msg_from2'>(debug_from)</td>
+						<td id='xmpp_msg_type2'>(xmpp_msg_type)</td>
+						<td id='xmpp_msg_data2'>(xmpp_msg_data)</td>
+						<td id='twitter_feed2'>(twitter feed)</td>
+					</tr>
+                    <tr class="info">
+						<td id='debug_msg1'>(debug_msg)</td>
+						<td id='debug_msg_from1'>(debug_from)</td>
+						<td id='xmpp_msg_type1'>(xmpp_msg_type)</td>
+						<td id='xmpp_msg_data1'>(xmpp_msg_data)</td>
+						<td id='twitter_feed1'>(twitter feed)</td>
+					</tr>
+					<tr class="info">
+						<td id='debug_msg'>(debug_msg)</td>
+						<td id='debug_msg_from'>(debug_from)</td>
+						<td id='xmpp_msg_type'>(xmpp_msg_type)</td>
+						<td id='xmpp_msg_data'>(xmpp_msg_data)</td>
+						<td id='twitter_feed'>(twitter feed)</td>
+					</tr>
+				</tbody>
+			</table>	
+		</div>
+	<!--</div>-->
+
+</div>
+
+{% raw %}
+<script type='text/html' id='resource_line'>
+	<li>
+		<a href='/device/'>
+			<i class='icon-plus-sign'></i>
+			<span class='resource res-{{resource}}'>{{ resource }}</span>
+			<span class='pull-right'>
+				<span class='label label-important' title='unavailable'>
+					<i class='icon-remove'></i></span>
+					<!-- IRD 24/07/2015 Sustituir atributo etiqueta HTML Style por clase css -->
+				<span class='label label-success' style='display:none' title='available'>
+					<i class='icon-ok'></i></span>
+			</span>
+		</a>
+	</li>
+</script>
+
+<script type='text/html' id='device_line'>
+	<li>
+		<a href='/device/{{ id }}'>
+			<i class='icon-home'></i> 
+			<span class='resource res-{{resource}}'>{{ resource }}</span> 
+			<span class='pull-right'>
+				<span class='label label-important' title='unavailable'>
+					<i class='icon-remove'></i></span>
+					<!-- IRD 24/07/2015 Sustituir atributo etiqueta HTML Style por clase css -->
+				<span class='label label-success' style='display:none' title='available'>
+					<i class='icon-ok'></i></span>
+			</span>
+		</a>
+	</li>
+</script>
+
+<script type='text/html' id='ind_elem_line'>
+	<li>
+		<a href='/ind_elem/'>
+			<i class='icon-home'></i>
+			<span class='resource res-{{resource}}'>{{ ind_elem }}</span>
+		</a>
+	</li>
+</script>
+
+
+{% endraw %}
+{% endblock %}
+
+{% block more_script %}
+<script type="text/javascript" src="/_ah/channel/jsapi"></script>
+<script type="text/javascript" src="/static/js2/d3.v3.min.js"></script>
+<script type='text/javascript' src='/static/js/lib/cubism.v1.min.js'></script>
+{% if debug %}
+<script type='text/javascript' src='/static/js/remoht.js'></script>
+{% else %}
+<script type='text/javascript' src='/static/js/remoht.min.js'></script>
+{% endif %}
+<script src="https://apis.google.com/js/client.js?onload=remoth.init"></script>
+<script type='text/javascript'>
+	$(document).ready(function() {
+	    <!-- Funciones propias de Google App (gae) -->
+		{% if gae_users.get_current_user() %}
+		remoht.logged_in = true
+		{% endif %}
+		console.debug("going to initiate a channel in index.html!")
+		remoht.init()
+	});
+</script>
+{% endblock %}

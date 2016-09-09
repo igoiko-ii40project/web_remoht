@@ -1,0 +1,8 @@
+indexes:
+- kind: Ind_Datapoint
+  ancestor: no
+  properties:
+  - name: Ind_Datapoint_data_source
+  - name: Ind_Datapoint_reception_timestamp
+    direction: desc
+  - name: Ind_Datapoint_owner

@@ -1,0 +1,163 @@
+{% extends "_base.html" %}
+
+{% block main %}
+	<div class='row'>
+	
+		<div class='span4'>
+			<div class='well'>
+				<div id='arbol'>
+					<ul>
+						<li id="nivel_1" data-jstree='{ "opened" : false, "type" : "default" }'></li>   
+					
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	
+		<div class='span8'>
+			<h1 id='device_header'>Asset Management & Monitoring (Mbox FFG view)
+				<small class='device_name pull-right'>(no device selected)</small>
+			</h1>
+
+			<div class='row'>
+				<div class='span4'>
+					<h4>Sample data read from device</h4>
+					<div id='relay_list' class='btn-toolbar'>
+						<a href='/device/-1/relay/1' class='btn btn-large disabled btn-primary'>Relay 1</a>
+						<a href='/device/-1/relay/2' class='btn btn-large disabled'>Relay 2</a>
+						<a href='/device/-1/relay/3' class='btn btn-large disabled'>Relay 3</a>
+					</div>
+					<a href='/' class='btn btn-large'>Principal</a>
+					<a onclick='remoht.cambios()' class='btn btn-large' id='cambios2'>Verifica</a>
+					<a onclick='remoht.recupera_datos2()' class='btn btn-large' id='cambios2'>Global</a>
+				</div>
+
+				<div class='span4' id='readings'>
+					<h4>Current Readings </h4>
+					<div>
+						<span class='rlabel'>Date:</span>
+						<strong id='current_date'>(timestamp)</strong>
+					</div>
+					<div>
+						<span class='rlabel'>JID:</span>
+						<strong id='full_JID'>(JID)</strong>
+					</div>
+					<div>
+						<span class='rlabel'>Temp:</span>
+						<strong id='temp'>(unknown)</strong>
+						<span class='muted'>&deg;c</span>
+					</div>
+					<div>
+						<span class='rlabel'>Light:</span>
+						<strong id='light'>(unknown)</strong>
+						<span class='muted'>%</span>
+					</div>				
+					
+				</div>
+			    </div>
+				<div class='row'>
+				
+				<div id='containermio' class='span8'>
+				<h1>PESTAÑAS</h1><button id="ocultar" value="Ocultar" onclick="detalle()" >Ocultar</button>
+				</div>
+
+				</div>
+				<div class='row'>
+				
+				<div class='span8'>
+				<h1>GRAFICA</h1>
+					<div id='chart'> </div>
+				</div>
+
+				</div>
+				<div class='row'>
+				
+				<div class='span8'>
+				<h1>GRAFICA 2</h1>
+				  <div id="cuerpo">
+					<div id='chart2'> </div>
+				  </div>
+				</div>
+
+				</div>
+				
+			</div>
+	</div>
+	
+
+	
+
+
+
+
+{% endblock %}
+
+{% block more_script %}
+<script type="text/javascript" src="/_ah/channel/jsapi"></script>
+<script type="text/javascript" src="/static/js2/d3.v3.min.js"></script>
+<script type='text/javascript' src='/static/js/lib/cubism.v1.min.js'></script>
+<!-- Necesario para presentar info graficamente como arbol -->
+<script type='text/javascript' src="/static/js/lib/jstree.min.js"></script>
+<!-- Necesario para presentar info en pestañas -->
+<script type='text/javascript' src="/static/js/lib/jquery.hashchange.js"></script>
+<script type='text/javascript' src="/static/js/lib/jquery.easytabs.js"></script>
+<link href='/static/css/pes.css' rel='stylesheet' />
+{% if debug %}
+<script type='text/javascript' src='/static/js/remoht.js'></script>
+{% else %}
+<script type='text/javascript' src='/static/js/remoht.min.js'></script>
+{% endif %}
+<script src="https://apis.google.com/js/client.js?onload=remoht.inicializa_datos"></script>
+<script type='text/javascript'>
+	$(document).ready(function() {
+	    <!-- Funciones propias de Google App (gae) -->
+		{% if gae_users.get_current_user() %}
+		remoht.logged_in = true
+		{% endif %}
+	  
+		
+		$(document)
+					.ajaxStart( function(e) { $('.spinner').fadeIn() })
+					.ajaxStop(  function(e) { $('.spinner').fadeOut() })
+		
+		/*remoht.mi_grafica()
+		remoht.mi_grafica_global2()*/
+		if ( remoht.logged_in ) 
+		{
+		    /* Llamada a la función que carga los datos de la cabecera y la última imagen al entrar
+			   en la página de detalle */
+		    remoht.inicializa_datos()
+			/*remoht.open_channel()*/
+			
+		}
+		else
+		{
+			remoht.start_demo_d()
+		}
+		
+		
+		
+		
+		
+	});
+	/*Función que muestra u oculta el detalle de la pestaña seleccionada*/
+	function detalle() 
+	{
+		var elemento = document.getElementById("detalle");
+		var boton = document.getElementById("ocultar");
+
+		if (boton.innerHTML=="Ocultar")
+		{
+			elemento.style.display="none";
+			boton.innerHTML="Mostrar";
+		}
+		else
+		{
+			elemento.style.display="block";
+			boton.innerHTML="Ocultar";
+		}
+	}	
+</script>
+{% endblock %}
+
