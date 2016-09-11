@@ -172,8 +172,8 @@ class ChatHandler(webapp2.RequestHandler):
                 model.cache_full_resource(from_jid, resource, full_resource)    #set memcache for that device, NEED TO TWEAK TO ENSURE THAT IT IS UPDATED ONLY WITH THE ACTIVE xmpp_user
                 logging.debug( "memcache set for %s/%s/%s", from_jid, resource, full_resource)
 
-                # I create a task to incrment the counter each time an auth login, and with a 30sec delay.
-                datetime_for_task=datetime.datetime.now()+datetime.timedelta(seconds=30)
+                # I create a task to incrment the counter each time an auth login, and with a 15sec delay.
+                datetime_for_task=datetime.datetime.now()+datetime.timedelta(seconds=15)
 
                 logging.debug( "task added poll_worker to be run at: %s",datetime_for_task.strftime("%Y/%m/%d-%H:%M:%S"))
 
