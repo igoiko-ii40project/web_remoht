@@ -212,9 +212,10 @@ var remoht = {
 
 		console.debug(datetime_stamp+"Show relays!", relays)
 		var target_list = $('#relay_list').text('') // clear the existing content
+		var target_list_cmd = $('#cmd_list').text('') // clear the existing content
 
 		for( key in relays ) {
-			console.debug(datetime_stamp+"in for loop for relay:", key)
+			console.debug(datetime_stamp+" in for loop for relay:", key)
 
 			var relay_button = app.n('a', {
 					href : '/device/'+device_id+'/relay/'+key,
@@ -236,7 +237,36 @@ var remoht = {
 				remoht.toggle_relay(device_id, data.key_, data.state_)
 			})
 
+            if (key=='relay_1'){
+                key_in=1
+                Btn_caption="Get Code"
+			}
+            if (key=='relay_2'){
+                key_in=2
+                Btn_caption="Get Cred"
+			}
+            state_in=state
+
+            //I use also to update the cmd commands (i accept in this implementation same # of cms as relays)
+			var cmd_button = app.n('a', {
+					href : '/device/'+device_id+'/funs/'+key_in,
+					'class' : 'btn btn-large' },
+				Btn_caption )
+			cmd_button.addClass('btn-primary')
+
+			console.debug(datetime_stamp+"cmd: key_in  & state_in :", key_in, state_in)
+
+			cmd_button.on( 'click', {cmd_:key_in,state_:state_in},function(e) {
+				e.preventDefault()
+		        var data=e.data
+		        console.debug(datetime_stamp+"cmd clicked!!: ", data.cmd_, data.state_)
+				remoht.get_cmd(device_id, data.cmd_, data.state_)
+			})
+
+
+
 			target_list.append(relay_button)
+			target_list_cmd.append(cmd_button)
 		}
 	},
 
@@ -251,6 +281,21 @@ var remoht = {
 			dataType : 'json',
 			data : { state : fromState == 0 ? 1 : 0 },
 			success : function(data,stat,xhr) {
+				// wait for callback over socket
+			}
+		})
+	},
+
+	get_cmd : function(device_id, cmd, fromState) {
+		var currentdate = new Date();
+		var datetime_stamp = "[" +currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds()+"]: ";
+		console.debug(datetime_stamp+"CMD!  ", cmd)
+		$.ajax('/device/'+device_id+"/funs/"+cmd, {
+			type : "POST",
+			dataType : 'json',
+			data : { cmd_ : cmd },
+			success : function(data,stat,xhr) {
+				console.debug(datetime_stamp+"cmd sent! ", data.cmd_)
 				// wait for callback over socket
 			}
 		})

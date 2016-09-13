@@ -92,18 +92,18 @@ class FunsHandler(BaseHandler):          # i enable a page to manage different a
 
         device = model.Device.get_by_id(int(device_id))
         if device is None: return self.notfound()
-        logging.info("Device ID: %d, %s", int(device_id),device.full_jid)
+        logging.info("Device ID: %d, %s, Fun: %s", int(device_id),device.full_jid,fun)
 
 #        fun = self.request.get('fun')     # i pass "fun" in the "POST", not in the "request"
 
-        if fun==1:
+        if fun=='1':
             fun_code="get_code"
-        elif fun==2:
+        elif fun=='2':
             fun_code="get_cred"
-        elif fun==3:
+        elif fun=='3':
             fun_code="request_image"
         else:
-            funcode=''
+            fun_code=''
             logging.debug("ERROR: FunsHandler Received unknown code: %s",fun)
 
         if fun_code == 'request_image':
